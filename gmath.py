@@ -16,24 +16,26 @@ def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
     return limit_color([x+y+z for x,y,z in zip(amb,diff,spec)])
 
 def calculate_ambient(alight, areflect):
-    return limit_color([x*y for x,y in zip(alight,areflect)])
+    return limit_color([int(x*y) for x,y in zip(alight,areflect)])
 
 def calculate_diffuse(light, dreflect, normal):
     lightvec = normalize(light[LOCATION])
     lightcolor = light[COLOR]
     dot = dot_product(lightvec,normalize(normal))
-    return limit_color([x*y*dot for x,y in zip(lightcolor,dreflect)])
+    return limit_color([int(x*y*dot) for x,y in zip(lightcolor,dreflect)])
 
 def calculate_specular(light, sreflect, view, normal):
-    lightvec = light[LOCATION]
+    lightvec = normalize(light[LOCATION])
     lightcolor = light[COLOR]
-    constant = 2 * dot_product(lightvec, normal)
-    temp = [constant*x-y for x,y in zip(normal, lightvec)]
-    constant = dot_product(temp, view) ** 16
-    return limit_color([x*y*constant for x,y in zip(lightcolor, sreflect)])
+    norm = normalize(normal)
+    constant = 2 * dot_product(lightvec, norm)
+    temp = [constant*x-y for x,y in zip(norm, lightvec)]
+    vw = normalize(view)
+    constant = dot_product(temp, vw) ** 16
+    return limit_color([int(x*y*constant) for x,y in zip(lightcolor, sreflect)])
 
 def limit_color(color):
-    return [255 if x > 255 else 0 for x in color]
+    return [255 if x > 255 else 0 if x < 0 else x for x in color]
 
 #vector functions
 def normalize(vector):
