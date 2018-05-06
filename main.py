@@ -35,4 +35,8 @@ edges = []
 polygons = []
 transform = new_matrix()
 
+#dw test code
 parse_file( 'script', edges, polygons, transform, screen, zbuffer, view, ambient, light, areflect, dreflect, sreflect)
+
+#henry
+#parse_file( 'shooter', edges, polygons, transform, screen, zbuffer, view, ambient, light, areflect, dreflect, sreflect)
